@@ -39,6 +39,7 @@ public class ClhtParser
                 builder.append(s);
                 builder.append(System.getProperty("line.separator"));
             }
+            reader.close();
             return builder.toString();
 
         } catch (IOException e) {

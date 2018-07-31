@@ -3,8 +3,9 @@ public class TransportLayer
 {
 
     private NetworkLayer networkLayer;
-    private static int propagation_delay, transmission_delay;
-    private boolean persistant=false, handshake=false;
+    private  int propagation_delay, transmission_delay;
+    private static boolean persistant = false;
+    private boolean handshake=false, connected=false;
     private byte[] byteArray;
 
     //server is true if the application is a server (should listen) or false if it is a client (should try and connect)
@@ -21,12 +22,22 @@ public class TransportLayer
         networkLayer = new NetworkLayer(server,propagation_delay,transmission_delay);
     }
 
+    public void enablePersistentProtocol()
+    {
+        persistant=true;
+        System.out.println("Enabledddddd");
+        System.out.println(persistant);
+    }
+
     public void send(byte[] payload)
     {
         handshake(null);
         networkLayer.send( payload );
 
-        if(persistant==false) handshake=false;
+        if(persistant==false) {
+            handshake=false;
+            connected=false;
+        }
     }
 
     public byte[] receive()
@@ -38,17 +49,22 @@ public class TransportLayer
 
     private void handshake(byte[] payload)
     {
+        if(persistant==false || connected ==false){
         if(handshake==false){
+
+
             if(payload != null){
                 String sload = new String (payload);
                  if(sload.equals("syn"))
                   {
                     sendAck();
                     handshake=true;
+                    connected=true;
                 }
                 else if(sload.equals("ack"))
                   {
                     handshake=true;
+                    connected=true;
                 }
 
                 }
@@ -57,6 +73,7 @@ public class TransportLayer
             else{
                 sendSyn();
         }
+    }
     }
 
     

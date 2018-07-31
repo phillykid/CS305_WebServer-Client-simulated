@@ -12,7 +12,6 @@ public class ClientPageBuilder {
     private ArrayList<String> constructedPage = new ArrayList<String>();
     private ArrayList<String> embeddedImages = new ArrayList<String>();
 
-    private int lineTracker = 0;
     private int linkTracker = 0;
 
     public ClientPageBuilder()
@@ -27,7 +26,6 @@ public class ClientPageBuilder {
         linkedPages = new ArrayList<String>();
         constructedPage = new ArrayList<String>();
         embeddedImages = new ArrayList<String>();
-        lineTracker = 0;
         linkTracker = 0;
     }
 	//Pareses the string that is served up from the ServerApp using the guidelines 
@@ -44,7 +42,6 @@ public class ClientPageBuilder {
                     constructedPage.add(linkTracker + 1 +". "+ broken_down_by_spaces[3]);
                     linkedPages.add(broken_down_by_spaces[2]);
                     line = reader.readLine();
-                    lineTracker++;
                     linkTracker++;
 
                 } else if (line.contains("img")) {
@@ -54,13 +51,11 @@ public class ClientPageBuilder {
 
                     constructedPage.add("IMG");
                     line = reader.readLine();
-                    lineTracker++;
 
                 } else {
 
                     constructedPage.add(line);
                     line = reader.readLine();
-                    lineTracker++;
 
                 }
             }
@@ -92,8 +87,8 @@ public class ClientPageBuilder {
 	//Inserts the supplied image in its correct posistion in the page array.
     public void insert_embedded_image(String image)
     {
-        System.out.println("ddddddddddddddd");
-                System.out.println(image);
+        try{
+    
 
 
 
@@ -104,6 +99,11 @@ public class ClientPageBuilder {
                 constructedPage.set(i,image);
                 return;
             }
+        }
+        }catch(Exception images)
+        {
+            System.out.println("Error 404: Resource Not Found");
+            System.out.println(images);
         }
     }
 

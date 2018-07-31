@@ -37,9 +37,9 @@ public class ClientApp {
 
         if(args[0].equals("true"))
         {
-            ClientApp cli = new ClientApp(args[0],args[1],args[2]); //Experiment mode constructor 
+         new ClientApp(args[0],args[1],args[2]); //Experiment mode constructor 
         } else{
-            ClientApp cli = new ClientApp(args[0],args[1]); //Interactive mode constructor
+            new ClientApp(args[0],args[1]); //Interactive mode constructor
         }
 
     }
@@ -72,6 +72,7 @@ public class ClientApp {
 
     public void set_http_protocol(String protocol){
         HTTP_PROTOCOL =protocol;
+        if(protocol.equals("1.1")) transportLayer.enablePersistentProtocol();
     }
 
     public String get_http_protocol(){
@@ -79,7 +80,7 @@ public class ClientApp {
     }
 
     public ClientApp(String mode, String protocol){
-        HTTP_PROTOCOL =protocol;
+        set_http_protocol(protocol);
         MODE = Boolean.parseBoolean(mode);
         System.out.print("Please enter the file you wish to request from server ie. rabbits.clht\n");
 
@@ -102,7 +103,7 @@ public class ClientApp {
     }
 
     public ClientApp(String mode, String protocol, String website){
-        HTTP_PROTOCOL =protocol;
+        set_http_protocol(protocol);
         MODE = Boolean.parseBoolean(mode);
         EXPR_WEBSITE = website;
 
@@ -192,6 +193,9 @@ public class ClientApp {
                     parser.parse_response_message(a);
 
                     DATA =parser.get_data();
+                    System.out.println("OOOOO");
+                    System.out.println(DATA);
+
                     if(check_cache(FILE_NAME)==true){
                        // System.out.println("cache: " +FILE_NAME +", " +DATA +"\n DONE\n");
                        // System.out.println("parser: " +parser.get_last_modified());
@@ -220,6 +224,7 @@ public class ClientApp {
             for (String img : cbuilder.getEmbeddedImages()) {
 
                 send_data(img);
+                System.out.println("look here!!!!!!");
                         System.out.println(img);
 
 
