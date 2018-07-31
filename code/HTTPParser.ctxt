@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.params=msg
+comment0.target=void\ parse_request_message(java.lang.String)
+comment0.text=\n\ Parse\ HTTP\ request\ message\ on\ Server\ side\n\ @param\ String\ msg\ -\ whole\ chunk\ of\ message\ from\ Client\n
+comment1.params=
+comment1.target=java.lang.String\ get_protocol()
+comment2.params=msg
+comment2.target=void\ parse_response_message(java.lang.String)
+comment2.text=\n\ Parse\ HTTP\ response\ message\ on\ Client\ side\n\ @param\ String\ msg\ -\ whole\ chunk\ of\ message\ from\ Server\n
+comment3.params=
+comment3.target=java.lang.String\ get_data()
+comment4.params=
+comment4.target=java.lang.String\ get_last_modified()
+comment5.params=
+comment5.target=java.lang.String\ get_file_name()
+numComments=6
