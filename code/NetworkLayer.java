@@ -34,10 +34,7 @@ public class NetworkLayer
         try {
                 if(payload == null) return payload;
 
-            Thread.sleep(propagation_delay);
 
-
-            Thread.sleep(transmission_delay * payload.length);
         }catch (Exception e){
         }
         return payload;
