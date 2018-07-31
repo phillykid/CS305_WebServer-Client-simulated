@@ -63,19 +63,10 @@ public class ServerApp
             //if client disconnected
             if(byteArray==null)
                 break;
+
             String str3 = new String ( byteArray );
 
-		//No connection ever made or a non-persistent reconnection
-            if(connected==false)
-            {
-		//handshake operation
-                String line = "ack";
-                byteArray = line.getBytes();
-                connected = true;
-                transportLayer.send( byteArray );
-
-            }
-            else {
+	
                 String res = new String(byteArray); //HTTP message from client
                 HTTPParser hp =new HTTPParser();
                 hp.parse_request_message(res);
@@ -93,7 +84,7 @@ public class ServerApp
                 transportLayer.send(http.get_response(file,HTTP_PROTOCOL).getBytes());
                 if(HTTP_PROTOCOL.equals("1.0")) connected = false; //Disconnects after sending if a non-persistent connection 
             }
-        }
+        
     }
 
 }

@@ -22,7 +22,6 @@ public class ClientApp {
 
     private String HTTP_PROTOCOL;
     private Boolean MODE;
-    private Boolean CONNECTION_ESTABLISHED = false;
     private String EXPR_WEBSITE;
 
     private String FILE_NAME;
@@ -156,25 +155,7 @@ public class ClientApp {
         return wait_for_data();
     }
 
-    /**
-     * Initiate handshake with server
-     */
-    public void handshake()
-    {
-        byte[] handShake = "syn".getBytes();
-
-        transportLayer.send(handShake);
-
-        while (true) {
-            byte[] checker = transportLayer.receive();
-            if (checker != null) {
-                String checkHandshake = new String(checker);
-                if (checkHandshake.equals("ack")) break;
-            }
-        }
-
-        CONNECTION_ESTABLISHED = true; //As not to send another handshake unecessarily
-    }
+   
     
     /**
      * Send HTTP request message to Server through transport layer
@@ -182,7 +163,6 @@ public class ClientApp {
      */
     public void send_data(String data_to_send) 
     {
-        if(CONNECTION_ESTABLISHED == false) {handshake();}
         HTTP http =new HTTP(data_to_send);
         http.set_http_protocol(HTTP_PROTOCOL);
 
@@ -209,7 +189,6 @@ public class ClientApp {
             if (byteArray != null) {
                 String a =new String(byteArray);
 
-                if (!a.equals("received")) {
                     HTTPParser parser =new HTTPParser();
                     parser.parse_response_message(a);
 
@@ -224,7 +203,7 @@ public class ClientApp {
 
                     }                    
                     return DATA;
-                }
+                
             }
         }
     }

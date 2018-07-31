@@ -22,31 +22,64 @@ public class TransportLayer
 
     public void send(byte[] payload)
     {
+        handshake();
         networkLayer.send( payload );
+
+        if(persistant==false) handshake==false;
     }
 
     public byte[] receive()
     {
-        byte[] payload = networkLayer.receive();    
+        byte[] payload = networkLayer.receive();
+        handshake();    
         return payload;
     }
 
     private handshake(byte[] payload)
     {
+        if(handshake==false){
+            if(payload != null){
+                String sload = new String (payload);
+                 if(sload.equals("syn"))
+                  {
+                    sendAck();
+                    handshake=true;
+                }
+                else if(sload.equals("ack"))
+                  {
+                    handshake=true;
+                }
 
-        if(payload != null){
-        String sload = new String (payload);
-        if(sload.equals("ack"))
+                }
+                
+        }
+            else{
+                sendSyn();
+        }
+    }
+
+    }
+
+    private sendAck()
+    {
+              String line = "ack";
+    byteArray = line.getBytes();
+    send(byteArray);
+                handshake = true; 
+    }
+
+    private sendSyn()
+    {
+              String line = "syn";
+    byteArray = line.getBytes();
+    send(byteArray);
+
+
+     while( handshake==false )
         {
-            handshake = true;
-        }
-        }
-        else{
-            String line = "ack";
-                byteArray = line.getBytes();
-                send(byteArray);
-        }
-        
-
+            //receive message from client, and send the "received" message back.
+            byte[] byteArray = networkLayer.receive();
+            if(byteArray!= null) handshake(byteArray);
+    
     }
 }
