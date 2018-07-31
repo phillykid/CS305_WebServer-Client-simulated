@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.Exception;
 
 
 
@@ -51,6 +52,8 @@ public class ServerApp
 
     public ServerApp(int propagation_delay, int transmission_delay)
     {
+
+        try{
         //create a new transport layer for server (hence true) (wait for client)
         ClhtParser parser = new ClhtParser();
         TransportLayer transportLayer = new TransportLayer(true, propagation_delay, transmission_delay);
@@ -76,14 +79,17 @@ public class ServerApp
                 String file = parser.retrieve_file(str);
                 HTTP http =new HTTP(file);
 
-                String line = "received";
-                byteArray = line.getBytes();
-                transportLayer.send(byteArray);
+                
                 byteArray = file.getBytes();
                 http.set_last_modified_server(get_last_modified(str));
                 transportLayer.send(http.get_response(file,HTTP_PROTOCOL).getBytes());
                 if(HTTP_PROTOCOL.equals("1.0")) connected = false; //Disconnects after sending if a non-persistent connection 
             }
+        }catch(Exception inserver)
+        {
+                System.out.println("Please close all opened terminals and try again(error is being worked on)");
+                System.out.println(inserver);
+        }
         
     }
 

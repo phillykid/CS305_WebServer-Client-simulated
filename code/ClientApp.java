@@ -174,7 +174,6 @@ public class ClientApp {
         else http.set_file_exists(false);
 
         transportLayer.send(http.get_request(data_to_send).getBytes());
-        if(HTTP_PROTOCOL.equals("1.0")) CONNECTION_ESTABLISHED = false;       
     }
 
     /**
@@ -214,12 +213,15 @@ public class ClientApp {
     {
         cbuilder.reset_page_builder();
         cbuilder.parse_file(page_file);
+        System.out.println(page_file);
 
         if (!cbuilder.getEmbeddedImages().isEmpty()) {
 	//If there are missing components
             for (String img : cbuilder.getEmbeddedImages()) {
 
                 send_data(img);
+                        System.out.println(img);
+
 
                 cbuilder.insert_embedded_image(wait_for_data());
 

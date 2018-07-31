@@ -92,6 +92,9 @@ public class ClientPageBuilder {
 	//Inserts the supplied image in its correct posistion in the page array.
     public void insert_embedded_image(String image)
     {
+        System.out.println("ddddddddddddddd");
+                System.out.println(image);
+
 
 
             for (int i = 0; i<constructedPage.size(); i++) {

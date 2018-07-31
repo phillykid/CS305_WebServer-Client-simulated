@@ -5,6 +5,7 @@ public class TransportLayer
     private NetworkLayer networkLayer;
     private static int propagation_delay, transmission_delay;
     private boolean persistant=false, handshake=false;
+    private byte[] byteArray;
 
     //server is true if the application is a server (should listen) or false if it is a client (should try and connect)
     public TransportLayer(boolean server, int propagation_delay, int transmission_delay)
@@ -22,20 +23,20 @@ public class TransportLayer
 
     public void send(byte[] payload)
     {
-        handshake();
+        handshake(null);
         networkLayer.send( payload );
 
-        if(persistant==false) handshake==false;
+        if(persistant==false) handshake=false;
     }
 
     public byte[] receive()
     {
         byte[] payload = networkLayer.receive();
-        handshake();    
+        handshake(payload);    
         return payload;
     }
 
-    private handshake(byte[] payload)
+    private void handshake(byte[] payload)
     {
         if(handshake==false){
             if(payload != null){
@@ -58,9 +59,9 @@ public class TransportLayer
         }
     }
 
-    }
+    
 
-    private sendAck()
+    private void sendAck()
     {
               String line = "ack";
     byteArray = line.getBytes();
@@ -68,7 +69,7 @@ public class TransportLayer
                 handshake = true; 
     }
 
-    private sendSyn()
+    private void sendSyn()
     {
               String line = "syn";
     byteArray = line.getBytes();
@@ -82,4 +83,5 @@ public class TransportLayer
             if(byteArray!= null) handshake(byteArray);
     
     }
+}
 }
