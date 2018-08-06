@@ -244,7 +244,7 @@ public class Client {
         }
     }
 
-    //Takes in the data string from the ServerApp and builds the web page while requesting the
+    //Takes in the data string from the Server and builds the web page while requesting the
     //embedded components and afterwards depending on mode ask for futher user interaction.	
     public void request_and_build_page(String page_file)
     {

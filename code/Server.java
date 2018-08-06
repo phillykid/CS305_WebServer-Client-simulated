@@ -53,13 +53,13 @@ public class Server {
    //create a new transport layer for server (hence true) (wait for client)
    ClhtParser parser = new ClhtParser();
    TransportLayer transportLayer = new TransportLayer(true, propagation_delay, transmission_delay);
-   
+
    System.out.println("Server Running......");
 
-   
+
    while (true) {
 
-    
+
 
     //receive message from client, and send the "received" message back.
     byte[] byteArray = transportLayer.receive();
@@ -75,43 +75,41 @@ public class Server {
     HTTPParser hp = new HTTPParser();
     hp.parse_request_message(res);
     String str = hp.get_file_name();
-    if (HTTP_PROTOCOL == null){
+    if (HTTP_PROTOCOL == null) {
      set_http_protocol(hp.get_protocol()); //Server being informed of the requested connection type
-     if(HTTP_PROTOCOL.equals("1.1"))  transportLayer.enablePersistentProtocol();
+     if (HTTP_PROTOCOL.equals("1.1")) transportLayer.enablePersistentProtocol();
 
     }
 
     String file;
     HTTPModule http;
 
-    if(hp.get_modified_since()!= null){
+    if (hp.get_modified_since() != null) {
 
 
 
     }
 
-    if(hp.get_modified_since()!= null 
-    &&hp.get_modified_since().equals(get_last_modified(str)))
-    {
-        
-        http = new HTTP(null);
-        http.set_last_modified_server(get_last_modified(str));
-        http.set_last_modified_client(hp.get_modified_since());
+    if (hp.get_modified_since() != null &&
+     hp.get_modified_since().equals(get_last_modified(str))) {
 
-        transportLayer.send(http.get_response(null, HTTP_PROTOCOL).getBytes());
+     http = new HTTP(null);
+     http.set_last_modified_server(get_last_modified(str));
+     http.set_last_modified_client(hp.get_modified_since());
+
+     transportLayer.send(http.get_response(null, HTTP_PROTOCOL).getBytes());
 
 
+    } else {
+     file = parser.retrieve_file(str);
+     http = new HTTPModule(file);
+     http.set_last_modified_server(get_last_modified(str));
+
+     byteArray = file.getBytes();
+     transportLayer.send(http.get_response(file, HTTP_PROTOCOL).getBytes());
     }
-    else{
-        file = parser.retrieve_file(str);
-       http = new HTTPModule(file);
-       http.set_last_modified_server(get_last_modified(str));
 
-       byteArray = file.getBytes();
-       transportLayer.send(http.get_response(file, HTTP_PROTOCOL).getBytes());
-    }
-    
-    
+
 
 
 
