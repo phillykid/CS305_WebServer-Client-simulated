@@ -6,12 +6,7 @@ import java.io.FileNotFoundException;
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
-/**
- * Write a description of class HTTPParser here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
+
 public class HTTPParser
 {
     protected String FILE_NAME;

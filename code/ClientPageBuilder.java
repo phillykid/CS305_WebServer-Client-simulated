@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 
-//Used in the ClientApp class to maintain the necessary components of the webpage and also puts 
+//Used in the Client class to maintain the necessary components of the webpage and also puts 
 //the page together using the compenents to be displayed by the ClientApp. 
 public class ClientPageBuilder {
     private ArrayList<String> linkedPages = new ArrayList<String>();
