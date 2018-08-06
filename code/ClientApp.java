@@ -15,10 +15,28 @@ public class ClientApp {
     private ClientPageBuilder cbuilder = new ClientPageBuilder();
     private String line;
 
-    //filename, data, lastModified
-    HashMap<String, String> innercache =new HashMap<String, String>();
-    Map<String,HashMap<String,String>> cache = new HashMap<String,HashMap<String,String>>();
-    //HashMap<String, String> cache =new HashMap<String, String>();
+
+    //<File Name, Entry<Last Modified, File Contents>
+    HashMap<String, File> cache =new HashMap<String, File>();
+
+    public class File{
+        private String last_mod;
+        private String data;
+    private File(String last_modified, String data)
+    {
+        this.last_mod=last_modified;
+        this.data=data;
+    }
+
+    public String getMod()
+    {
+        return last_mod;
+    }
+    public String getData()
+    {
+        return data;
+    }
+}
 
     private String HTTP_PROTOCOL;
     private Boolean MODE;
@@ -26,6 +44,11 @@ public class ClientApp {
 
     private String FILE_NAME;
     private String DATA;
+
+    private String COMMAND_MESSAGE = "Please enter the file you wish to request from server ie. rabbits.clht\n";
+    private String LINK_SELECTION_MESSAGE = "Enter the number of the link you want to select or q to exit";
+
+
 
     /**
      * main
@@ -49,8 +72,8 @@ public class ClientApp {
      * @param String fn - filname
      * @param String data -content of file
      */
-    public String get_modified(String fn, String data){
-        String mod =cache.get(fn).get(data);
+    public String get_modified(String fn){
+        String mod =cache.get(fn).getMod();
         return mod;
     }
 
@@ -61,8 +84,7 @@ public class ClientApp {
      * @param String lastMod - file last modified date
      */
     public void add_to_cache(String fn, String data, String lastMod){
-        innercache.put(data, lastMod);
-        cache.put(fn, innercache);
+        cache.put(fn,new File(lastMod,data));
     }
 
     public boolean check_cache(String fn){
@@ -82,7 +104,7 @@ public class ClientApp {
     public ClientApp(String mode, String protocol){
         set_http_protocol(protocol);
         MODE = Boolean.parseBoolean(mode);
-        System.out.print("Please enter the file you wish to request from server ie. rabbits.clht\n");
+        System.out.print(COMMAND_MESSAGE);
 
         try {
             line = reader.readLine();
@@ -128,7 +150,7 @@ public class ClientApp {
 
 	//Waits for the required response from user and triggers a related action
     public int wait_for_response() {
-        System.out.println("Enter the number of the link you want to select or q to exit");
+        System.out.println(LINK_SELECTION_MESSAGE);
         try {
             line = reader.readLine();
 
@@ -170,7 +192,11 @@ public class ClientApp {
         FILE_NAME =data_to_send;
         if(check_cache(data_to_send)==true){ 
             http.set_file_exists(true); 
-            http.set_last_modified_client(get_modified(FILE_NAME, DATA));
+            http.set_last_modified_client(get_modified(FILE_NAME));
+            System.out.println("HELOOOOOOOOO");
+            System.out.println(get_modified(FILE_NAME));
+            System.out.println(http.get_last_modified_client());
+
         }
         else http.set_file_exists(false);
 
@@ -193,18 +219,24 @@ public class ClientApp {
                     parser.parse_response_message(a);
 
                     DATA =parser.get_data();
-                    System.out.println("OOOOO");
-                    System.out.println(DATA);
+                    System.out.println("adadadda");
+                    System.out.println(parser.get_status());
 
-                    if(check_cache(FILE_NAME)==true){
-                       // System.out.println("cache: " +FILE_NAME +", " +DATA +"\n DONE\n");
-                       // System.out.println("parser: " +parser.get_last_modified());
 
-                    } else{
 
+
+                    if(check_cache(FILE_NAME)==false){
                         add_to_cache(FILE_NAME, parser.get_data(), parser.get_last_modified());
+                        System.out.println("fffffffffffffffffff");
+                        System.out.println(parser.get_last_modified());
+                    } 
+                    else if(parser.get_status().equals("304"))  
+                    {
+                        System.out.println("CACHEEEEEEEE" +DATA);
 
-                    }                    
+                        return cache.get(FILE_NAME).getData();
+                    }    
+
                     return DATA;
                 
             }
@@ -217,15 +249,14 @@ public class ClientApp {
     {
         cbuilder.reset_page_builder();
         cbuilder.parse_file(page_file);
-        System.out.println(page_file);
 
+        
         if (!cbuilder.getEmbeddedImages().isEmpty()) {
 	//If there are missing components
             for (String img : cbuilder.getEmbeddedImages()) {
 
                 send_data(img);
-                System.out.println("look here!!!!!!");
-                        System.out.println(img);
+
 
 
                 cbuilder.insert_embedded_image(wait_for_data());

@@ -9,16 +9,16 @@ import java.util.TimeZone;
  */
 public class HTTP
 {
-    protected String HOST ="../website_example";
-    protected String HTTP ="HTTP/";
+    protected static final String HOST ="../website_example";
+    protected static final String HTTP ="HTTP/";
     protected String STATUS ="";
     protected boolean FILE_EXISTS =false;
     protected int STATUS_CODE;
     protected String DATA;
 
     String PROTOCOL;
-    String LAST_MODIFIED_CLIENT;
-    String LAST_MODIFIED_SERVER;
+    String LAST_MODIFIED_CLIENT="1";
+    String LAST_MODIFIED_SERVER="2";
 
     /**
      * Constructor
@@ -98,7 +98,7 @@ public class HTTP
     public String get_response(String filename, String proto){
         StringBuilder sb =new StringBuilder();
         check_file();
-        if(FILE_EXISTS==true && STATUS_CODE==200){ //modified
+        if(FILE_EXISTS==true && STATUS_CODE==200){ // modified
             sb.append(HTTP+proto + " " + filename + " " +get_status_message(get_status_code()) +"\n");
             sb.append("Date: " +get_current_date() +"\n");
             sb.append("Server: Apache/1.3.0 (Unix)\n");
@@ -109,7 +109,6 @@ public class HTTP
             sb.append(HTTP+proto + " " +get_status_message(get_status_code()) +"\n");
             sb.append("Date: " +get_current_date() +"\n");
             sb.append("Server: Apache/1.3.0 (Unix)\n");
-            sb.append("Data: \n\n" +DATA);
         } else{
             sb.append(HTTP+proto + " " +get_status_message(get_status_code()) +"\n");
             sb.append("Date: " +get_current_date() +"\n");
@@ -128,9 +127,14 @@ public class HTTP
      * Check if the file modified date in cache in client side and actual server matches or not
      */
     public int check_file(){
-        if(get_last_modified_client()==get_last_modified_server()){
+        System.out.println("jawnnn");
+        System.out.println(get_last_modified_client());
+        System.out.println(get_last_modified_server());
+
+        if(get_last_modified_client().equals(get_last_modified_server())){
             set_status_code(304);
-        } else if(get_last_modified_client()!=get_last_modified_server() || get_file_exists()==false){
+            System.out.println("STAUSSSSSSSSSSS");
+        } else if(!get_last_modified_client().equals(get_last_modified_server()) || get_file_exists()==false){
             set_status_code(200);
         } else{
             set_status_code(404);
@@ -167,9 +171,6 @@ public class HTTP
         return HOST;
     }
 
-    public String get_protocol(){
-        return PROTOCOL;
-    }
 
     public String get_data(){
         return DATA;

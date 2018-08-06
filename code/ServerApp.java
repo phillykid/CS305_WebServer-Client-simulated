@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 
 
 
-
+//Run from terminal using [java ServerApp "number" "number"]
 //Launches as java SeverApp "1"(propagation_delay) "1"(transmission_delay)
 public class ServerApp {
  private static int dprop;
@@ -73,13 +73,46 @@ public class ServerApp {
      if(HTTP_PROTOCOL.equals("1.1"))  transportLayer.enablePersistentProtocol();
 
     }
-    String file = parser.retrieve_file(str);
-    HTTP http = new HTTP(file);
+
+    String file;
+    HTTP http;
+
+    if(hp.get_modified_since()!= null){
+        System.out.println(hp.get_modified_since());
+        System.out.println(get_last_modified(str));
+        System.out.println("MY addadadadaddadadas");
 
 
-    byteArray = file.getBytes();
-    http.set_last_modified_server(get_last_modified(str));
-    transportLayer.send(http.get_response(file, HTTP_PROTOCOL).getBytes());
+    }
+
+    if(hp.get_modified_since()!= null 
+    &&hp.get_modified_since().equals(get_last_modified(str)))
+    {
+        
+        http = new HTTP(null);
+        http.set_last_modified_server(get_last_modified(str));
+        http.set_last_modified_client(hp.get_modified_since());
+
+        System.out.println("MY GUYYYYYYYYYYYYY");
+        transportLayer.send(http.get_response(null, HTTP_PROTOCOL).getBytes());
+
+
+    }
+    else{
+        System.out.println("MY dadaddadada");  
+
+        file = parser.retrieve_file(str);
+       http = new HTTP(file);
+       http.set_last_modified_server(get_last_modified(str));
+
+       byteArray = file.getBytes();
+       transportLayer.send(http.get_response(file, HTTP_PROTOCOL).getBytes());
+    }
+    
+    
+
+
+
    }
   } catch (Exception inserver) {
    System.out.println("Please close all opened terminals and try again(error is being worked on)");

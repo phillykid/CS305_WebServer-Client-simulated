@@ -20,6 +20,7 @@ public class HTTPParser
     protected String STATUS;
     protected String HOST;
     protected String IF_MODIFIED_SINCE;
+    protected int IF_MODIFIED_SUBSTRING=20; //where to retain string from
     protected String LAST_MODIFIED; 
     protected String DATE, CONTENT_TYPE;
     protected String DATA;
@@ -33,6 +34,9 @@ public class HTTPParser
             Scanner sc =new Scanner(new StringReader(msg));
             while(sc.hasNextLine()){
                 try{
+                    System.out.println("yolo");
+                    System.out.println(msg);
+
                     String line =sc.nextLine();
                     Scanner lsc =new Scanner(line);
                     if(lsc.hasNext()){
@@ -54,7 +58,12 @@ public class HTTPParser
                             }           
                             case "If-Modified-Since:":
                             {
-                                IF_MODIFIED_SINCE =lsc.next();
+                
+                                
+                                    IF_MODIFIED_SINCE=line.substring(IF_MODIFIED_SUBSTRING);
+                                
+                        
+
                                 break;
                             }                       
                         }                 
@@ -81,6 +90,7 @@ public class HTTPParser
      */
     public void parse_response_message(String msg){
         try{
+            //System.out.print();
             Scanner sc =new Scanner(new StringReader(msg));
             while(sc.hasNextLine()){
                 try{
@@ -122,6 +132,9 @@ public class HTTPParser
                             }
                             case "Data:":
                             {
+                                
+
+
                                 DATA =line.substring(6)+"\n";
                                 line =sc.nextLine();
                                 while(sc.hasNextLine())
@@ -151,8 +164,17 @@ public class HTTPParser
     public String get_last_modified(){ 
         return LAST_MODIFIED;
     }
+
+    public String get_modified_since(){ 
+        return IF_MODIFIED_SINCE;
+    }
     
     public String get_file_name(){
         return FILE_NAME;
     }
+
+    public String get_status(){
+        return STATUS;
+    }
+
 }

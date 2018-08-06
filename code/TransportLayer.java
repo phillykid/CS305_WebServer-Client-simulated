@@ -8,7 +8,7 @@ public class TransportLayer
     private boolean handshake=false, connected=false;
     private byte[] byteArray;
 
-    //server is true if the application is a server (should listen) or false if it is a client (should try and connect)
+    //Server is true if the application is a server (should listen) or false if it is a client (should try and connect)
     public TransportLayer(boolean server, int propagation_delay, int transmission_delay)
     {
         networkLayer = new NetworkLayer(server,propagation_delay,transmission_delay);
@@ -25,10 +25,10 @@ public class TransportLayer
     public void enablePersistentProtocol()
     {
         persistant=true;
-        System.out.println("Enabledddddd");
-        System.out.println(persistant);
-    }
 
+    }
+    //Sends the data after doing handhake procedures if needed
+    //and resets the connection boolean if needed.
     public void send(byte[] payload)
     {
         handshake(null);
@@ -40,6 +40,8 @@ public class TransportLayer
         }
     }
 
+    //Receives data from networklayer and runs handshake method to
+    //proceed with the next required step.
     public byte[] receive()
     {
         byte[] payload = networkLayer.receive();
@@ -47,6 +49,13 @@ public class TransportLayer
         return payload;
     }
 
+
+    //Checks whether connected and connection type. 
+    //Checks if given input signifies a handshake term.
+    //Given the input and booleans it follows one of the 3 cases.
+    //Sending syn when connections has not been established.
+    //Sending ack when a connection request has been made. 
+    //Setting connection to true when connection request confirmed. 
     private void handshake(byte[] payload)
     {
         if(persistant==false || connected ==false){
@@ -58,8 +67,6 @@ public class TransportLayer
                  if(sload.equals("syn"))
                   {
                     sendAck();
-                    handshake=true;
-                    connected=true;
                 }
                 else if(sload.equals("ack"))
                   {
@@ -84,8 +91,11 @@ public class TransportLayer
     byteArray = line.getBytes();
     send(byteArray);
                 handshake = true; 
+                connected=true;
+
     }
 
+    //Sends syn message and waits till connection is established.
     private void sendSyn()
     {
               String line = "syn";
@@ -95,7 +105,6 @@ public class TransportLayer
 
      while( handshake==false )
         {
-            //receive message from client, and send the "received" message back.
             byte[] byteArray = networkLayer.receive();
             if(byteArray!= null) handshake(byteArray);
     
