@@ -15,6 +15,7 @@ public class ServerApp {
  private static int dtrans;
  private String HTTP_PROTOCOL;
 
+
  /**
   * main
   * @param args[0] - propagation delay 
@@ -52,8 +53,14 @@ public class ServerApp {
    //create a new transport layer for server (hence true) (wait for client)
    ClhtParser parser = new ClhtParser();
    TransportLayer transportLayer = new TransportLayer(true, propagation_delay, transmission_delay);
+   
+   System.out.println("Server Running......");
 
+   
    while (true) {
+
+    
+
     //receive message from client, and send the "received" message back.
     byte[] byteArray = transportLayer.receive();
 
@@ -78,9 +85,7 @@ public class ServerApp {
     HTTP http;
 
     if(hp.get_modified_since()!= null){
-        System.out.println(hp.get_modified_since());
-        System.out.println(get_last_modified(str));
-        System.out.println("MY addadadadaddadadas");
+
 
 
     }
@@ -93,14 +98,11 @@ public class ServerApp {
         http.set_last_modified_server(get_last_modified(str));
         http.set_last_modified_client(hp.get_modified_since());
 
-        System.out.println("MY GUYYYYYYYYYYYYY");
         transportLayer.send(http.get_response(null, HTTP_PROTOCOL).getBytes());
 
 
     }
     else{
-        System.out.println("MY dadaddadada");  
-
         file = parser.retrieve_file(str);
        http = new HTTP(file);
        http.set_last_modified_server(get_last_modified(str));

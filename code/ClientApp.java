@@ -8,6 +8,12 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
+
+//Run with java ClientApp false 1.1 in terminal or
+//java ClientApp true 1.1 animals.clht
+// True for auto and false for interactive
+
+
 //This class represents the client application
 public class ClientApp {
     private TransportLayer transportLayer = new TransportLayer(false);
@@ -45,7 +51,7 @@ public class ClientApp {
     private String FILE_NAME;
     private String DATA;
 
-    private String COMMAND_MESSAGE = "Please enter the file you wish to request from server ie. rabbits.clht\n";
+    private String COMMAND_MESSAGE = "Please enter the file you wish to request from server ie. animals.clht\n";
     private String LINK_SELECTION_MESSAGE = "Enter the number of the link you want to select or q to exit";
 
 
@@ -193,9 +199,7 @@ public class ClientApp {
         if(check_cache(data_to_send)==true){ 
             http.set_file_exists(true); 
             http.set_last_modified_client(get_modified(FILE_NAME));
-            System.out.println("HELOOOOOOOOO");
-            System.out.println(get_modified(FILE_NAME));
-            System.out.println(http.get_last_modified_client());
+
 
         }
         else http.set_file_exists(false);
@@ -219,20 +223,17 @@ public class ClientApp {
                     parser.parse_response_message(a);
 
                     DATA =parser.get_data();
-                    System.out.println("adadadda");
-                    System.out.println(parser.get_status());
+
 
 
 
 
                     if(check_cache(FILE_NAME)==false){
                         add_to_cache(FILE_NAME, parser.get_data(), parser.get_last_modified());
-                        System.out.println("fffffffffffffffffff");
-                        System.out.println(parser.get_last_modified());
+                    
                     } 
                     else if(parser.get_status().equals("304"))  
                     {
-                        System.out.println("CACHEEEEEEEE" +DATA);
 
                         return cache.get(FILE_NAME).getData();
                     }    

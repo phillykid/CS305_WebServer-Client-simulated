@@ -34,8 +34,7 @@ public class HTTPParser
             Scanner sc =new Scanner(new StringReader(msg));
             while(sc.hasNextLine()){
                 try{
-                    System.out.println("yolo");
-                    System.out.println(msg);
+
 
                     String line =sc.nextLine();
                     Scanner lsc =new Scanner(line);
@@ -90,7 +89,7 @@ public class HTTPParser
      */
     public void parse_response_message(String msg){
         try{
-            //System.out.print();
+
             Scanner sc =new Scanner(new StringReader(msg));
             while(sc.hasNextLine()){
                 try{

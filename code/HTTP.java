@@ -127,13 +127,9 @@ public class HTTP
      * Check if the file modified date in cache in client side and actual server matches or not
      */
     public int check_file(){
-        System.out.println("jawnnn");
-        System.out.println(get_last_modified_client());
-        System.out.println(get_last_modified_server());
 
         if(get_last_modified_client().equals(get_last_modified_server())){
             set_status_code(304);
-            System.out.println("STAUSSSSSSSSSSS");
         } else if(!get_last_modified_client().equals(get_last_modified_server()) || get_file_exists()==false){
             set_status_code(200);
         } else{
@@ -158,12 +154,11 @@ public class HTTP
         String msg ="";
         if(sc==200){
             msg ="200 OK"; //Contents changed since last visit            
-        } else if(sc==304){ //304
-            msg ="Page 304. Not Modified";
+        } else if(sc==304){ 
+            msg ="304 Not Modified";
         }  else{
-            msg ="Error 404. File Not Found";
+            msg ="404 File Not Found";
         }
-        //System.out.println("status message: " +msg);
         return msg;
     }
 
