@@ -8,9 +8,9 @@ import java.text.SimpleDateFormat;
 
 
 
-//Run from terminal using [java ServerApp "number" "number"]
+//Run from terminal using [java Server "number" "number"]
 //Launches as java SeverApp "1"(propagation_delay) "1"(transmission_delay)
-public class ServerApp {
+public class Server {
  private static int dprop;
  private static int dtrans;
  private String HTTP_PROTOCOL;
@@ -24,7 +24,7 @@ public class ServerApp {
  public static void main(String[] args) throws Exception {
   dprop = Integer.parseInt(args[0]);
   dtrans = Integer.parseInt(args[1]);
-  new ServerApp(dprop, dtrans);
+  new Server(dprop, dtrans);
  }
 
  /**
@@ -47,7 +47,7 @@ public class ServerApp {
   return HTTP_PROTOCOL;
  }
 
- public ServerApp(int propagation_delay, int transmission_delay) {
+ public Server(int propagation_delay, int transmission_delay) {
 
   try {
    //create a new transport layer for server (hence true) (wait for client)
@@ -82,7 +82,7 @@ public class ServerApp {
     }
 
     String file;
-    HTTP http;
+    HTTPModule http;
 
     if(hp.get_modified_since()!= null){
 
@@ -104,7 +104,7 @@ public class ServerApp {
     }
     else{
         file = parser.retrieve_file(str);
-       http = new HTTP(file);
+       http = new HTTPModule(file);
        http.set_last_modified_server(get_last_modified(str));
 
        byteArray = file.getBytes();
